@@ -22,7 +22,8 @@ public class BudgetTest {
 
     DateTimeFormatter formatter;
 
-    BudgetCalculator calculator;
+    private BudgetCalculator calculator;
+    private BudgetCalculator emptyCalculator;
 
     @Before
     public void init(){
@@ -47,6 +48,8 @@ public class BudgetTest {
         emptyRepo = mock(BudgetRepo.class);
         when(emptyRepo.findAll()).thenReturn(new ArrayList<>());
 
+        emptyCalculator = new BudgetCalculator(emptyRepo);
+
         formatter = DateTimeFormatter.ofPattern("d/MM/yyyy");
     }
 
@@ -57,6 +60,12 @@ public class BudgetTest {
 
     @Test
     public void emptyTest() {
+        LocalDate start = getDate("19/12/2017");
+        LocalDate end = getDate("19/12/2017");
+
+        long result = emptyCalculator.calcBudget(start, end);
+
+        assertEquals(0, result);
     }
 
     @Test
@@ -106,19 +115,19 @@ public class BudgetTest {
         assertEquals(11, result);
     }
 
-    @Test
-    public void endMonthValueTest(){
-        LocalDate date = getDate("1/01/2018");
-        assertEquals(1, calculator.getEndAmount(date, BudgetCalculator.END));
-        date = getDate("12/03/2018");
-        assertEquals(12, calculator.getEndAmount(date, BudgetCalculator.END));
-    }
-
-    @Test
-    public void startMonthValueTest(){
-        LocalDate date = getDate("31/01/2018");
-        assertEquals(1, calculator.getEndAmount(date, BudgetCalculator.START));
-        date = getDate("20/03/2018");
-        assertEquals(12, calculator.getEndAmount(date, BudgetCalculator.START));
-    }
+//    @Test
+//    public void endMonthValueTest(){
+//        LocalDate date = getDate("1/01/2018");
+//        assertEquals(1, calculator.getEndAmount(date, BudgetCalculator.END));
+//        date = getDate("12/03/2018");
+//        assertEquals(12, calculator.getEndAmount(date, BudgetCalculator.END));
+//    }
+//
+//    @Test
+//    public void startMonthValueTest(){
+//        LocalDate date = getDate("31/01/2018");
+//        assertEquals(1, calculator.getEndAmount(date, BudgetCalculator.START));
+//        date = getDate("20/03/2018");
+//        assertEquals(12, calculator.getEndAmount(date, BudgetCalculator.START));
+//    }
 }
